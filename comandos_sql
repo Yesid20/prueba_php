@@ -1,0 +1,51 @@
+Los comandos utilizados fueron
+
+postgres=# CREATE DATABASE my_bdprueba;
+CREATE DATABASE
+postgres=# CREATE TABLE usuarios (
+   id SERIAL PRIMARY KEY,
+   nombre VARCHAR(50),
+   apellido VARCHAR(50),
+   email VARCHAR(50) UNIQUE,
+   edad INTEGER
+);
+CREATE TABLE
+postgres=# INSERT INTO usuarios (nombre, apellido, email, edad)
+VALUES ('Brayan', 'Lindarte', 'edgarcarloscamilo@gmail.com', 23);
+INSERT 0 1
+postgres=# UPDATE usuarios SET edad = 23 WHERE email = 'ingbrayan@gopenux.com';
+UPDATE 0
+postgres=# UPDATE usuarios SET edad = 25 WHERE email = 'edgarcarloscamilo@gmail.com';
+UPDATE 1
+postgres=# SELECT * FROM usuarios WHERE email = 'edgarcarloscamilo@gmail.com';
+ id | nombre | apellido |            email            | edad 
+----+--------+----------+-----------------------------+------
+  1 | Brayan | Lindarte | edgarcarloscamilo@gmail.com |   25
+(1 row)
+
+postgres=# git init
+postgres-# git add my_bd
+
+postgres-# git add my_bdprueba
+postgres-# git commit -m "Pràctico de validaciòn de conocimientos"
+postgres-# git branch
+postgres-# exit
+Use \q to quit.
+postgres-# \q
+ 
+Y se realizo una segunda entrada para realizar el delete 
+
+postgres=# \c my_
+my_bdprueba  my_dbprueba  
+postgres=# \c my_
+my_bdprueba  my_dbprueba  
+postgres=# \c my_
+my_bdprueba  my_dbprueba  
+postgres=# \c my_dbprueba 
+You are now connected to database "my_dbprueba" as user "postgres".
+my_dbprueba=# DELETE FROM usuarios WHERE email = 'edgarcarloscamilo@gmail.com';
+ERROR:  relation "usuarios" does not exist
+LÍNEA 1: DELETE FROM usuarios WHERE email = 'edgarcarloscamilo@gmail....
+                     ^
+my_dbprueba=# exit
+
