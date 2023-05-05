@@ -1,0 +1,35 @@
+<?php
+require_once __DIR__ . '/var/www/html/proyectico/vendor'; //intento de conexiòn
+
+$cliente = new MongoDB\Client('mongodb://localhost:27017');
+
+$db = $cliente->usuariosdb;
+$coleccion = $db->usuarios;
+
+$nuevo_usuario = [
+    'nombre' => 'Brayan',
+    'apellido' => 'Lindarte',
+    'edad' => 22,
+    'correo' => 'edgarcarloscamilo@gmail.com'
+];
+$resultado = $coleccion->insertOne($nuevo_usuario);
+
+echo "El nuevo usuario ha sido agregado con el ID: " . $resultado->getInsertedId();
+$actualizacion = [
+    '$set' => [
+        'edad' => 23,
+        'correo' => 'ingbrayan@gmail.com'
+    ]
+];
+$resultado = $coleccion->updateOne(['nombre' => 'Brayan'], $actualizacion);
+
+echo "Se han actualizado " . $resultado->getModifiedCount() . " documentos.";
+
+$usuario = $coleccion->findOne(['correo' => 'edgarcarloscamilo@gmail.com']);
+
+echo "Nombre: " . $usuario['nombre'] . "<br>";
+echo "Apellido: " . $usuario['apellido'] . "<br>";
+echo "Edad: " . $usuario['edad'] . "<br>";
+echo "Correo electrónico: " . $usuario['correo'] . "<br>";
+
+?>
