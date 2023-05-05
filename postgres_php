@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conectar PHP con postgreSQL</title>
+</head>
+<body>
+    <?php
+    include_once ("Conexiòn.php");
+    CConexion::ConexionBD();
+
+
+
+    ?>
+</body>
+</html>
+
+
+
+
+
+
+<?php
+
+//forma 1 
+class CConexion{
+
+    function ConexionBD(){
+        $host = "localhost";
+        $dbname = "my_db";
+        $username = "nuevo";
+        $pasword = "nuevo2021";
+        
+        try {
+            $conn = new PDO ("pgsql:host=$host; dbname=$dbname", $username, $password);
+            echo "Se conectò correctamente a la base de datos";
+
+        }
+        catch( PDOException $exp){
+            echo ("No se pudo conectar a la bd, $exp");
+        }
+
+        return $conn;
+    }
+
+}
+
+//forma 2
+
+
+$conexion=pg_connect("host=localhost dbname=my_bdprueba user=nuevo password=nuevo2021");
+if($conexion){
+    echo "Se conecto a la base de datos";
+}else{
+    echo "No se conecto, sigue intentando";
+}
+
+
+    
+?>
