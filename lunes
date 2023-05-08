@@ -1,0 +1,282 @@
+//formulario
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Usuario</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS v5.2.0-beta1 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center p-5">
+        <div class="col-sm-6">
+          <h5>Formulario</h5>
+          <hr />
+          <form action="insertar.php" method="POST">
+            <input type="hidden" id="id" />
+            <label for="nombres">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              id="Nombre"
+              name="nombre"
+              placeholder="Nombres Apellidos"
+              autofocus
+              required
+            />
+            <label for="Correo">Correo</label>
+            <input
+              type="Correo"
+              class="form-control"
+              id="Correo"
+              name="correo"
+              placeholder="Correo@Correo.com"
+              required
+            />
+            <label for="email">Cedula</label>
+            <input
+              type="number"
+              class="form-control"
+              id="cedula"
+              name="cedula"
+              placeholder= "Ingrese su Cedula"
+              required
+            />
+            <label for="email">Fecha de nacimiento</label>
+            <input
+              type="date"
+              class="form-control"
+              id="Fecha_nacimiento"
+              name="fecha_nacimiento"
+              placeholder= "Ingrese su Fecha de nacimiento"
+              required
+            />
+            <br />
+            <div>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="reset" class="btn btn-danger">Cancelar</button>
+            </div>
+        </form>
+          <br />
+          <h5>Listado</h5>
+          <hr />
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombres</th>
+                <th>Correo</th>
+                <th>Cedula</th>
+                <th>Opciones</th>
+                <th>Mensaje</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="../assets/code.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+      integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+      integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+    
+</body>
+</html>
+
+//conexion
+<?php
+$prueba = pg_connect("host=localhost port=5432 dbname=my_dbprueba user=nuevo password=nuevo2021");
+
+if($prueba) {
+    echo "Conexiòn exitosa";
+}else{
+    echo "Lo sentimos, no se pudo realizar la conexiòn";
+}
+?>
+
+
+//insertar 
+
+
+$host='localhost';
+$bd='my_dbprueba';
+$user='nuevo';
+$password='nuevo2021';
+
+$conexion=pg_connect("host=$host dbname=$bd user=$user password=$password");
+
+$query=("INSERT INTO usuarios(nombre, correo, cedula, fecha_nacimiento)
+    VALUES('$_REQUEST[nombre]','$_REQUEST[correo]','$_REQUEST[cedula]','$_REQUEST[fecha_nacimiento]')");
+
+$consulta=pg_query($conexion,$query);
+pg_close();
+echo 'El alumno fue dado de alta';
+?>
+
+//tabla_usuarios
+
+
+<?php
+
+require_once('conexion.php'); 
+
+
+$query = "SELECT * FROM usuarios";
+$resultado = pg_query($conn, $query);
+
+echo "<table>";
+echo "<tr><th>Nombre</th><th>Correo</th><th>Cédula</th><th>Fecha de nacimiento</th><th>Mensaje</th><th>Acciones</th></tr>";
+while($fila = pg_fetch_array($resultado)) {
+    echo "<tr>";
+    echo "<td>" . $fila['nombre'] . "</td>";
+    echo "<td>" . $fila['correo'] . "</td>";
+    echo "<td>" . $fila['cedula'] . "</td>";
+    echo "<td>" . $fila['fecha_nacimiento'] . "</td>";
+    echo "<td>" . $fila['mensaje'] . "</td>";
+    echo "<td><a href='editar_usuario.php?id=" . $fila['id'] . "'>Editar</a> | <a href='eliminar_usuario.php?id=" . $fila['id'] . "'>Eliminar</a></td>";
+    echo "</tr>";
+}
+echo "</table>";
+
+
+pg_close($conn);
+
+?>
+
+//usuario 
+<?php
+
+require_once('conexion.php');
+
+class Usuario {
+    private $nombre;
+    private $correo;
+    private $cedula;
+    private $fecha_nacimiento;
+    private $mensaje;
+
+    public function __constructor($nombre, $correo, $cedula, $fecha_nacimiento, $mensaje){
+        $this->nombre=$nombre;
+        $this->correo=$correo;
+        $this->cedula=$cedula;
+        $this->fecha_nacimiento=$fecha_nacimiento;
+        $this->mensaje=$mensaje;
+    }
+
+    public function getNombre(){
+        return $this->nombre;
+    }
+
+    public function getCorreo(){
+        return $this->correo;
+    }
+
+    public function getCedula(){
+        return $this->cedula;
+    }
+
+    public function getFecha_nacimiento(){
+        return $this->fecha_nacimiento;
+    }
+
+    public function getMensaje(){
+        return $this->mensaje;
+    }
+
+    public function setNombre($nombre){
+        return $this->nombre= $nombre;
+    }
+    public function setCorreo($correo){
+        return $this->correo= $correo;
+    }
+    public function setCedula($cedula){
+        return $this->cedula= $cedula;
+    }
+    public function setFecha_nacimiento($fecha_nacimiento){
+        return $this->fecha_nacimiento= $fecha_nacimiento;
+    }
+    public function setMensaje($mensaje){
+        return $this->mensaje= $mensaje;
+    }
+
+}
+?>
+
+//Busqueda 
+
+
+$host='localhost';
+$bd='my_dbprueba';
+$user='nuevo';
+$password='nuevo2021';
+
+$conn = pg_connect("host=$host dbname=$bd user=$user password=$password");
+if (!$conn) {
+  echo "Error de conexión: " . pg_last_error();
+  exit;
+}
+
+
+$query = "SELECT * FROM usuarios WHERE cedula=''";
+
+//$consulta = pg_query($conn, $query) or die('No se encontraron registros. ' . pg_last_error());
+
+
+if (pg_num_rows($consulta) > 0) {
+  while ($obj = pg_fetch_assoc($consulta)) {
+    echo 'Datos del usuario encontrado ' . $obj['cedula'] . '<br>';
+    echo 'Nombre completo: ' . $obj['nombre'] . '<br>';
+  }
+} else {
+  echo 'No se encontraron registros.';
+}
+
+pg_close($conn);
+?>
+
+//index de busqueda
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador</title>
+</head>
+<body>
+    <form action="busqueda.php" method="POST">
+    <label for="" name="cedula" id="cedula">Ingresa la cèdula:</label>
+    <input type="text" name="cedula">
+    <input type="submit" name="Buscar">
+    </form>
+</body>
+</html>
+
+
